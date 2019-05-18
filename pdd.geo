@@ -5,7 +5,7 @@
 Include "pdd_data.geo" ;
 
 Solver.AutoShowLastStep = 1;
-Mesh.Algorithm = 2;
+Mesh.Algorithm = 1;
 Geometry.CopyMeshingMethod = 1;
 
 nicepos_rotor[] = {};
@@ -33,13 +33,13 @@ Hide { Line{ Line '*' }; }
 Hide { Point{ Point '*' }; }
 
 Physical Line("NICEPOS") = { nicepos_rotor[],nicepos_rotor2[],nicepos_stator_mag[] };
-Show { Line{ nicepos_rotor[],nicepos_rotor2[], nicepos_stator[],nicepos_stator_mag[] }; }
+Show { Line{ nicepos_rotor[],nicepos_rotor2[], nicepos_stator_mag[] }; }
 
 //For post-processing...
 View[PostProcessing.NbViews-1].Light = 0;
 View[PostProcessing.NbViews-1].NbIso = 60;              // Number of intervals
 View[PostProcessing.NbViews-1].IntervalsType = 1;       // 1 - Iso Values; 2 - Continuous Map
-View[PostProcessing.NbViews-1].LineWidth = 2;           // espessura linha
+View[PostProcessing.NbViews-1].LineWidth = 2.5;           // espessura linha
 View[PostProcessing.NbViews-1].ColormapNumber = 2;      // color map - 2 default - 10 B&W
 
 General.Trackball = 0;
