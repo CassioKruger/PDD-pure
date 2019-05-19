@@ -16,7 +16,7 @@ DefineConstant
 
   Flag_NL = { 1, Choices{0,1}, Name "Input/60Nonlinear BH-curve"},
 
-  Flag_NL_law_Type = { 0, Choices{
+  Flag_NL_law_Type = { 1, Choices{
                        0="Analytical", 1="Interpolated",
                        2="Analytical VH800-65D", 3="Interpolated VH800-65D"},
                        Name "Input/61BH-curve", Highlight "Blue", Visible Flag_NL}
@@ -164,7 +164,7 @@ Function {
   EndFor
 
   For k In {1:nbMagnetsStator}
-    br[ Stator_Magnet~{k} ] = 0;//(-1)^(k-1) * b_remanent * Vector[ Cos[Atan2[Y[],X[]]], Sin[Atan2[Y[],X[]]], 0 ];
+    br[ Stator_Magnet~{k} ] = (-1)^(k-1) * b_remanent * Vector[ Cos[Atan2[Y[],X[]]], Sin[Atan2[Y[],X[]]], 0 ];
   EndFor
 
   //Data for modeling a stranded inductor
@@ -172,7 +172,7 @@ Function {
   // STATOR_IND_AM comprises all the slots in that phase, we need thus to divide by the number of slots
   nbSlots[] = Ceil[nbInds/NbrPhases/2] ;
   SurfCoil[] = SurfaceArea[]{STATOR_IND_AM}/nbSlots[] ;//All inductors have the same surface
-  Torque_mec[] = 0;
+  Torque_mec[] = 1000;
 
   //--------------------------------------------------
   FillFactor_Winding = 0.5 ; // percentage of Cu in the surface coil side, smaller than 1
@@ -214,7 +214,7 @@ Function {
   //relação de engrenagem de um pdd
   // pH*wH + pL*wL = nP*wP
   // wH is the speed of the inner rotor
-  // wL is the speed of the outer rotor2
+  // wL is the speed of the outer rotor
   // wP is the speed of the modulators
   // When one of the three parts of the gear is stationary, there will be a constant relation or gear ratio
   //  between the speeds of other two parts.
@@ -229,11 +229,15 @@ Function {
   gear_ratio = NbrPolesInModel/NbrSectStatorMag;
 
   delta_theta[] = delta_theta_deg * deg2rad ;   //angulo de giro do rotor 1
-  delta_theta2[] = delta_theta[] * gear_ratio ;                 //angulo de giro do rotor 2
+  delta_theta2[] = delta_theta[] * gear_ratio ; //angulo de giro do rotor 2
+
+
 
   time0 = 0 ; // at initial rotor position
   delta_time = delta_theta_deg * deg2rad/wr;
   timemax = thetaMax/wr;
+
+  //my_delta_theta[] = delta_time * $1;
 
   DefineConstant
   [
