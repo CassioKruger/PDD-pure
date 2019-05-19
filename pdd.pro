@@ -211,8 +211,25 @@ Function {
                         Highlight "AliceBlue", Visible (Flag_AnalysisType==1)}
   ];
 
+  //relação de engrenagem de um pdd
+  // pH*wH + pL*wL = nP*wP
+  // wH is the speed of the inner rotor
+  // wL is the speed of the outer rotor2
+  // wP is the speed of the modulators
+  // When one of the three parts of the gear is stationary, there will be a constant relation or gear ratio
+  //  between the speeds of other two parts.
+
+  //considering that the outer rotor is stationary, the gear ratio becomes:
+  // -> pH*wH = nP*wP
+  // -> Gr = pH/nP = wP/wH
+  // -> gear ratio = nbr of poles at rotor 1 / nbr of modulators
+
+  // in this case, the nbr of modulators is equal to the nbr of poles at the outer rotor, so:
+
+  gear_ratio = NbrPolesInModel/NbrSectStatorMag;
+
   delta_theta[] = delta_theta_deg * deg2rad ;   //angulo de giro do rotor 1
-  delta_theta2[] = 0* deg2rad ;                 //angulo de giro do rotor 2
+  delta_theta2[] = delta_theta[] * gear_ratio ;                 //angulo de giro do rotor 2
 
   time0 = 0 ; // at initial rotor position
   delta_time = delta_theta_deg * deg2rad/wr;
