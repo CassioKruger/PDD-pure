@@ -405,7 +405,7 @@ Constraint {
   }
   { Name CurrentVelocity ; // [rad/s]
     Case {
-      { Region DomainKin ; Type Init ; Value ($PreviousVelocity = 0) ; }
+      { Region DomainKin ; Type Init ; Value  0. ; }
     }
   }
 
@@ -417,7 +417,7 @@ Constraint {
   }
   { Name CurrentVelocity2 ; // [rad/s]
     Case {
-      { Region DomainKin2 ; Type Init ; Value ($PreviousVelocity2 = 0) ; }
+      { Region DomainKin2 ; Type Init ; Value  0. ; }
     }
   }
 
@@ -640,8 +640,8 @@ Formulation {
       { Name P2 ; Type Global ; NameOfSpace Position2 [P2] ; } // position   MB2
     }
     Equation {
-      GlobalTerm { DtDof [ /*Inertia **/ Dof{V} , {V} ] ; In DomainKin ; }
-      GlobalTerm { [ rpm * Dof{V} , {V} ] ; In DomainKin ; }
+      GlobalTerm { /*DtDof*/ [ Dof{V} , {V} ] ; In DomainKin ; }  //  rad/s
+      GlobalTerm { [ (rpm*2*Pi)/60, {V} ] ; In DomainKin ; }
       //GlobalTerm { [        Torque_mec[], {V} ] ; In DomainKin ; }
       //GlobalTerm { [       Torque_mag[] , {V} ] ; In DomainKin ; }
 
@@ -650,9 +650,8 @@ Formulation {
 
       //---------------------------------------------------------------//
 
-      GlobalTerm { DtDof [ /*Inertia*0.7 **/ Dof{V2} , {V2} ] ; In DomainKin2 ; }
-      //GlobalTerm { [ Friction[] * Dof{V2} , {V2} ] ; In DomainKin2 ; }
-      //GlobalTerm { [        Torque_mec[] , {V2} ] ; In DomainKin2 ; }
+      GlobalTerm { /*DtDof*/ [  Dof{V2} , {V2} ] ; In DomainKin2 ; }  // rad/s
+      GlobalTerm { [ ((rpm*2*Pi)/60) *gear_ratio , {V2} ] ; In DomainKin2 ; }
       //GlobalTerm { [       Torque_mag[] , {V2} ] ; In DomainKin2 ; }
 
       GlobalTerm { DtDof [ Dof{P2} , {P2} ] ; In DomainKin2 ; }
@@ -800,8 +799,6 @@ Resolution {
             // Keep track of previous position
             Evaluate[ $PreviousPosition = $Position ];
             Evaluate[ $PreviousPosition2 = $Position2 ];
-            Evaluate[ $PreviousVelocity = $Velocity ];
-            Evaluate[ $PreviousVelocity2 = $Velocity2 ];
           EndIf
 
           MeshMovingBand2D[MB] ;
@@ -1039,14 +1036,14 @@ PostProcessing {
      { Name P ; Value { Term { [ {P} ]  ; In DomainKin ; } } } // Position [rad]
      { Name Pdeg ; Value { Term { [ {P}*180/Pi ]  ; In DomainKin ; } } } // Position [deg]
      { Name V ; Value { Term { [ {V} ]  ; In DomainKin ; } } } // Velocity [rad/s]
-     { Name Vrpm ; Value { Term { [ {V}*30/Pi ]  ; In DomainKin ; } } } // Velocity [rpm]
+     { Name Vrpm ; Value { Term { [ {V}*60/(2*Pi) ]  ; In DomainKin ; } } } // Velocity [rpm]
 
       //------------------------------------------------------------------------------------//
       //MB2
      { Name P2 ; Value { Term { [ {P2} ]  ; In DomainKin2 ; } } } // Position [rad]
      { Name Pdeg2 ; Value { Term { [ {P2}*180/Pi ]  ; In DomainKin2 ; } } } // Position [deg]
      { Name V2 ; Value { Term { [ {V2} ]  ; In DomainKin2 ; } } } // Velocity [rad/s]
-     { Name Vrpm2 ; Value { Term { [ {V2}*30/Pi ]  ; In DomainKin2 ; } } } // Velocity [rpm]
+     { Name Vrpm2 ; Value { Term { [ {V2}*60/(2*Pi) ]  ; In DomainKin2 ; } } } // Velocity [rpm]
    }
  }
 
@@ -1255,31 +1252,31 @@ PostOperation Get_Torque_cplx UsingPost MagStaDyn_a_2D {
 
 PostOperation Mechanical UsingPost Mechanical {
 
-  Print[ P, OnRegion DomainKin, Format TimeTable,
+  Print[ P, OnRegion DomainKin, Format Table,
    File > StrCat[ResDir,"P", ExtGnuplot], LastTimeStepOnly, StoreInVariable $Position,
    SendToServer StrCat[po_mecRotor1 ,"Position [rad]"]{0}, Color "Red4"] ;
-  Print[ Pdeg, OnRegion DomainKin, Format TimeTable,
+  Print[ Pdeg, OnRegion DomainKin, Format Table,
    File > StrCat[ResDir,"P_deg", ExtGnuplot], LastTimeStepOnly,
    SendToServer StrCat[po_mecRotor1 ,"Position [deg]"]{0}, Color "Red4"] ;
-  Print[ V, OnRegion DomainKin, Format TimeTable,
-   File > StrCat[ResDir,"V", ExtGnuplot], LastTimeStepOnly, StoreInVariable $Velocity,
+  Print[ V, OnRegion DomainKin, Format Table,
+   File > StrCat[ResDir,"V", ExtGnuplot], LastTimeStepOnly,
    SendToServer StrCat[po_mecRotor1 ,"Velocity [rad\s]"]{0}, Color "Red1"] ;//MediumPurple1
-  Print[ Vrpm, OnRegion DomainKin, Format TimeTable,
+  Print[ Vrpm, OnRegion DomainKin, Format Table,
    File > StrCat[ResDir,"Vrpm", ExtGnuplot], LastTimeStepOnly,
    SendToServer StrCat[po_mecRotor1 ,"Velocity [rpm]"]{0}, Color "Red1"] ;//MediumPurple1
 
     //------------------------------------------------------------------//
     //MB2 Friction
-  Print[ P2, OnRegion DomainKin2, Format TimeTable,
+  Print[ P2, OnRegion DomainKin2, Format Table,
    File > StrCat[ResDir,"P2", ExtGnuplot], LastTimeStepOnly, StoreInVariable $Position2,
    SendToServer StrCat[po_mecRotor2,"Position2 [rad]"]{0}, Color "ForestGreen"] ;
-  Print[ Pdeg2, OnRegion DomainKin2, Format TimeTable,
+  Print[ Pdeg2, OnRegion DomainKin2, Format Table,
    File > StrCat[ResDir,"P_deg2", ExtGnuplot], LastTimeStepOnly,
    SendToServer StrCat[po_mecRotor2,"Position2 [deg]"]{0}, Color "ForestGreen"] ;
-  Print[ V2, OnRegion DomainKin2, Format TimeTable,
-   File > StrCat[ResDir,"V2", ExtGnuplot], LastTimeStepOnly, StoreInVariable $Velocity2,
+  Print[ V2, OnRegion DomainKin2, Format Table,
+   File > StrCat[ResDir,"V2", ExtGnuplot], LastTimeStepOnly,
    SendToServer StrCat[po_mecRotor2,"Velocity2 [rad\s]"]{0}, Color "Green"] ;//MediumPurple1
-  Print[ Vrpm2, OnRegion DomainKin2, Format TimeTable,
+  Print[ Vrpm2, OnRegion DomainKin2, Format Table,
    File > StrCat[ResDir,"Vrpm2", ExtGnuplot], LastTimeStepOnly,
    SendToServer StrCat[po_mecRotor2,"Velocity2 [rpm]"]{0}, Color "Green"] ;//MediumPurple1
 }
