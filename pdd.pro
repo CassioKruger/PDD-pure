@@ -196,7 +196,7 @@ Function {
 
   DefineConstant
   [
-    thetaMax_deg = { 30, Name "Input/21End rotor angle (loop)",Highlight "AliceBlue", Visible (Flag_AnalysisType==1) }
+    thetaMax_deg = { 370, Name "Input/21End rotor angle (loop)",Highlight "AliceBlue", Visible (Flag_AnalysisType==1) }
   ];
 
   theta0   = InitialRotorAngle + 0. ;

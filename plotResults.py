@@ -72,7 +72,7 @@ if (flag == '3'):
     print(flag)
 
     fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2)
-    fig.suptitle('Poção e velocidade')
+    fig.suptitle('Posição e Velocidade')
 
     ax1.set_title('Rotor 1')
     ax1.plot(tempoPosVel,posRotor1Deg,color = [0, 0.4470, 0.7410])
@@ -92,7 +92,7 @@ if (flag == '3'):
     ax4.plot(tempoPosVel,veloRotor2Rpm,color = [0.8500, 0.3250, 0.0980])
     ax4.legend(["[Rad/s]","[RPM]"])
 
-    ax1.set(ylabel='Posicao')
+    ax1.set(ylabel='Posição')
     ax3.set(xlabel='Tempo (s)', ylabel='Velocidade')
     ax4.set(xlabel='Tempo (s)')
     plt.show()
