@@ -641,8 +641,8 @@ Formulation {
     }
     Equation {
       GlobalTerm { DtDof [ /*Inertia **/ Dof{V} , {V} ] ; In DomainKin ; }
-      //GlobalTerm { [ Friction[] * Dof{V} , {V} ] ; In DomainKin ; }
-      GlobalTerm { [        Torque_mec[], {V} ] ; In DomainKin ; }
+      GlobalTerm { [ rpm * Dof{V} , {V} ] ; In DomainKin ; }
+      //GlobalTerm { [        Torque_mec[], {V} ] ; In DomainKin ; }
       //GlobalTerm { [       Torque_mag[] , {V} ] ; In DomainKin ; }
 
       GlobalTerm { DtDof [ Dof{P} , {P} ] ; In DomainKin ; }
@@ -1078,18 +1078,18 @@ PostOperation Get_LocalFields UsingPost MagStaDyn_a_2D {
    AppendTimeStepToFileName Flag_SaveAllSteps ] ;
   Print[ js, OnElementsOf DomainS,
    File StrCat[ResDir,"js",ExtGmsh], LastTimeStepOnly,
-   AppendTimeStepToFileName Flag_SaveAllSteps ] ;*/
+   AppendTimeStepToFileName Flag_SaveAllSteps ] ;
   Print[ b,  OnElementsOf Domain,
    File StrCat[ResDir,"b",ExtGmsh], LastTimeStepOnly,
-   AppendTimeStepToFileName Flag_SaveAllSteps] ;
-/*  Print[ boundary, OnElementsOf DomainPlotMovingGeo,
+   AppendTimeStepToFileName Flag_SaveAllSteps] ;*/
+  Print[ boundary, OnElementsOf DomainPlotMovingGeo,
    File StrCat[ResDir,"bnd",ExtGmsh], LastTimeStepOnly,
    AppendTimeStepToFileName Flag_SaveAllSteps] ;
   Echo[ Str["For i In {PostProcessing.NbViews-1:0:-1}",
             "  If(!StrCmp(View[i].Name, 'boundary'))",
             "    View[i].ShowElement=1;",
             "   EndIf",
-            "EndFor"], File "res/tmp.geo", LastTimeStepOnly] ;*/
+            "EndFor"], File "res/tmp.geo", LastTimeStepOnly] ;
   Print[ az, OnElementsOf Domain,
    File StrCat[ResDir,"a",ExtGmsh], LastTimeStepOnly,
    AppendTimeStepToFileName Flag_SaveAllSteps ] ;

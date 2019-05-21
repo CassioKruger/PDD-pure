@@ -32,7 +32,7 @@ Mesh.Light = 0 ;
 Hide { Line{ Line '*' }; }
 Hide { Point{ Point '*' }; }
 
-Physical Line("NICEPOS") = { nicepos_rotor[],nicepos_rotor2[],nicepos_stator_mag[] };
+Physical Line(NICEPOS) = { nicepos_rotor[],nicepos_rotor2[],nicepos_stator_mag[] };
 Show { Line{ nicepos_rotor[],nicepos_rotor2[], nicepos_stator_mag[] }; }
 
 //For post-processing...
