@@ -1075,10 +1075,10 @@ PostOperation Get_LocalFields UsingPost MagStaDyn_a_2D {
    AppendTimeStepToFileName Flag_SaveAllSteps ] ;
   Print[ js, OnElementsOf DomainS,
    File StrCat[ResDir,"js",ExtGmsh], LastTimeStepOnly,
-   AppendTimeStepToFileName Flag_SaveAllSteps ] ;
+   AppendTimeStepToFileName Flag_SaveAllSteps ] ;*/
   Print[ b,  OnElementsOf Domain,
    File StrCat[ResDir,"b",ExtGmsh], LastTimeStepOnly,
-   AppendTimeStepToFileName Flag_SaveAllSteps] ;*/
+   AppendTimeStepToFileName Flag_SaveAllSteps] ;
   Print[ boundary, OnElementsOf DomainPlotMovingGeo,
    File StrCat[ResDir,"bnd",ExtGmsh], LastTimeStepOnly,
    AppendTimeStepToFileName Flag_SaveAllSteps] ;

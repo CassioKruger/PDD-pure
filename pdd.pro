@@ -228,6 +228,8 @@ Function {
 
   gear_ratio = NbrPolesInModel/NbrSectStatorMag;
 
+  //1:8,333333333
+
   delta_theta[] = delta_theta_deg * deg2rad ;   //angulo de giro do rotor 1
   delta_theta2[] = delta_theta[] * gear_ratio ; //angulo de giro do rotor 2
 
